@@ -145,7 +145,7 @@ void main() {
       final sep = '.'; // We don't care what the path separator character is
       final firstUnfoundExample = new RegExp('warning: lib${sep}example.dart: '
           '@example file not found.*test_package${sep}dog${sep}food.md');
-      if (!result.stderr.contains(firstUnfoundExample)) {
+      if (!result.stdout.contains(firstUnfoundExample)) {
         fail('Should warn about unfound @example files: \n'
             'stdout:\n${result.stdout}\nstderr:\n${result.stderr}');
       }

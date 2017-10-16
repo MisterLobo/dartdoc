@@ -12,6 +12,7 @@ import 'package:analyzer/src/dart/sdk/sdk.dart';
 import 'package:analyzer/src/generated/sdk.dart';
 import 'package:args/args.dart';
 import 'package:dartdoc/dartdoc.dart';
+import 'package:dartdoc/src/logging.dart';
 import 'package:path/path.dart' as path;
 import 'package:stack_trace/stack_trace.dart';
 
@@ -47,9 +48,9 @@ main(List<String> arguments) async {
 
   final bool sdkDocs = args['sdk-docs'];
 
-  var showProgress = args['show-progress'] as bool;
+  final showProgress = args['show-progress'] as bool;
 
-  var readme = args['sdk-readme'];
+  var readme = args['sdk-readme'] as String;
   if (readme != null && !(new File(readme).existsSync())) {
     stderr.writeln(
         " fatal error: unable to locate the SDK description file at $readme.");
@@ -121,6 +122,42 @@ main(List<String> arguments) async {
     _printUsageAndExit(parser, exitCode: 1);
   }
 
+  final stopwatch = new Stopwatch()..start();
+
+  // Used to track if we're printing `...` to show progress.
+  // Allows unified new-line tracking
+  var writingProgress = false;
+
+  logEvents.listen((record) {
+    if (record.level == LogLevels.progress) {
+      if (showProgress &&
+          writingProgress &&
+          stopwatch.elapsed.inMilliseconds > 500) {
+        stdout.write('.');
+        stopwatch.reset();
+      }
+      return;
+    }
+
+    if (writingProgress) {
+      // print a new line after progress dots...
+      print('');
+      writingProgress = false;
+    }
+    var message = record.message.toString();
+    assert(message == message.trimRight());
+    assert(message.isNotEmpty);
+
+    if (message.endsWith('...')) {
+      // Assume there may be more progress to print, so omit the trailing
+      // newline
+      writingProgress = true;
+      stdout.write(message);
+    } else {
+      print(message);
+    }
+  });
+
   PackageMeta packageMeta = sdkDocs
       ? new PackageMeta.fromSdk(sdkDir,
           sdkReadmePath: readme, useCategories: args['use-categories'])
@@ -142,9 +179,8 @@ main(List<String> arguments) async {
     }
   }
 
-  print("Generating documentation for '${packageMeta}' into "
+  logInfo("Generating documentation for '${packageMeta}' into "
       "${outputDir.absolute.path}${Platform.pathSeparator}");
-  print('');
 
   var generators = await initGenerators(url, args['rel-canonical-prefix'],
       headerFilePaths: headerFilePaths,
@@ -154,13 +190,8 @@ main(List<String> arguments) async {
       useCategories: args['use-categories'],
       prettyIndexJson: args['pretty-index-json']);
 
-  var progressCounter = 0;
-
   void onProgress(Object file) {
-    if (showProgress && progressCounter % 5 == 0) {
-      stdout.write('.');
-    }
-    progressCounter += 1;
+    logProgress(file);
   }
 
   for (var generator in generators) {
@@ -211,9 +242,9 @@ main(List<String> arguments) async {
       includeExternals: includeExternals);
 
   dartdoc.onCheckProgress.listen(onProgress);
-  Chain.capture(() async {
+  await Chain.capture(() async {
     DartDocResults results = await dartdoc.generateDocs();
-    print('\nSuccess! Docs generated into ${results.outDir.absolute.path}');
+    logInfo('Success! Docs generated into ${results.outDir.absolute.path}');
   }, onError: (e, Chain chain) {
     if (e is DartDocFailure) {
       stderr.writeln('\nGeneration failed: ${e}.');
@@ -237,7 +268,8 @@ ArgParser _createArgsParser() {
       defaultsTo: false);
   parser.addFlag('sdk-docs',
       help: 'Generate ONLY the docs for the Dart SDK.', negatable: false);
-  parser.addFlag('show-warnings', help: 'Display warnings.', negatable: false);
+  parser.addFlag('show-warnings',
+      help: 'Display warnings.', negatable: false, defaultsTo: false);
   parser.addFlag('show-progress',
       help: 'Display progress indications to console stdout', negatable: false);
   parser.addOption('sdk-readme',
