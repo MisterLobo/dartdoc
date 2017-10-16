@@ -47,9 +47,7 @@ main(List<String> arguments) async {
 
   final bool sdkDocs = args['sdk-docs'];
 
-  if (args['show-progress']) {
-    _showProgress = true;
-  }
+  var showProgress = args['show-progress'] as bool;
 
   var readme = args['sdk-readme'];
   if (readme != null && !(new File(readme).existsSync())) {
@@ -156,8 +154,17 @@ main(List<String> arguments) async {
       useCategories: args['use-categories'],
       prettyIndexJson: args['pretty-index-json']);
 
+  var progressCounter = 0;
+
+  void onProgress(Object file) {
+    if (showProgress && progressCounter % 5 == 0) {
+      stdout.write('.');
+    }
+    progressCounter += 1;
+  }
+
   for (var generator in generators) {
-    generator.onFileCreated.listen(_onProgress);
+    generator.onFileCreated.listen(onProgress);
   }
 
   DartSdk sdk = new FolderBasedDartSdk(PhysicalResourceProvider.INSTANCE,
@@ -203,7 +210,7 @@ main(List<String> arguments) async {
       outputDir, packageMeta, includeLibraries,
       includeExternals: includeExternals);
 
-  dartdoc.onCheckProgress.listen(_onProgress);
+  dartdoc.onCheckProgress.listen(onProgress);
   Chain.capture(() async {
     DartDocResults results = await dartdoc.generateDocs();
     print('\nSuccess! Docs generated into ${results.outDir.absolute.path}');
@@ -217,8 +224,6 @@ main(List<String> arguments) async {
     }
   });
 }
-
-bool _showProgress = false;
 
 ArgParser _createArgsParser() {
   var parser = new ArgParser();
@@ -316,15 +321,6 @@ ArgParser _createArgsParser() {
   );
 
   return parser;
-}
-
-int _progressCounter = 0;
-
-void _onProgress(var file) {
-  if (_showProgress && _progressCounter % 5 == 0) {
-    stdout.write('.');
-  }
-  _progressCounter += 1;
 }
 
 /// Print help if we are passed the help option.
