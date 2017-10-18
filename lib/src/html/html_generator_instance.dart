@@ -19,47 +19,37 @@ import 'templates.dart';
 
 typedef void FileWriter(String path, Object content);
 
-class HtmlGeneratorInstance implements HtmlOptions {
+class HtmlGeneratorInstance {
   final HtmlGeneratorOptions _options;
   final Templates _templates;
-  final Package package;
-  final List<ModelElement> documentedElements = <ModelElement>[];
+  final Package _package;
+  final List<ModelElement> _documentedElements = <ModelElement>[];
   final FileWriter _writer;
 
-  String get url => _options.url;
-
-  @override
-  String get relCanonicalPrefix => _options.relCanonicalPrefix;
-
-  @override
-  String get toolVersion => _options.toolVersion;
-  String get faviconPath => _options.faviconPath;
-  bool get useCategories => _options.useCategories;
-  bool get prettyIndexJson => _options.prettyIndexJson;
-
   HtmlGeneratorInstance(
-      this._options, this._templates, this.package, this._writer);
+      this._options, this._templates, this._package, this._writer);
 
   Future generate() async {
-    if (package != null) {
+    if (_package != null) {
       _generateDocs();
       _generateSearchIndex();
     }
 
     await _copyResources();
-    if (faviconPath != null) {
-      var bytes = new File(faviconPath).readAsBytesSync();
+    if (_options.faviconPath != null) {
+      var bytes = new File(_options.faviconPath).readAsBytesSync();
       _writer(path.join('static-assets', 'favicon.png'), bytes);
     }
   }
 
   void _generateSearchIndex() {
-    var encoder =
-        prettyIndexJson ? new JsonEncoder.withIndent(' ') : new JsonEncoder();
+    var encoder = _options.prettyIndexJson
+        ? new JsonEncoder.withIndent(' ')
+        : new JsonEncoder();
 
     final List<Map> indexItems =
-        documentedElements.where((e) => e.isCanonical).map((ModelElement e) {
-      Map data = {
+        _documentedElements.where((e) => e.isCanonical).map((ModelElement e) {
+      var data = <String, dynamic>{
         'name': e.name,
         'qualifiedName': e.name,
         'href': e.href,
@@ -91,98 +81,99 @@ class HtmlGeneratorInstance implements HtmlOptions {
   }
 
   void _generateDocs() {
-    if (package == null) return;
+    if (_package == null) return;
 
     generatePackage();
 
-    for (var lib in package.libraries) {
-      generateLibrary(package, lib);
+    for (var lib in _package.libraries) {
+      generateLibrary(_package, lib);
 
       for (var clazz in lib.allClasses) {
         // TODO(jcollins-g): consider refactor so that only the canonical
         // ModelElements show up in these lists
         if (!clazz.isCanonical) continue;
 
-        generateClass(package, lib, clazz);
+        generateClass(_package, lib, clazz);
 
         for (var constructor in clazz.constructors) {
           if (!constructor.isCanonical) continue;
-          generateConstructor(package, lib, clazz, constructor);
+          generateConstructor(_package, lib, clazz, constructor);
         }
 
         for (var constant in clazz.constants) {
           if (!constant.isCanonical) continue;
-          generateConstant(package, lib, clazz, constant);
+          generateConstant(_package, lib, clazz, constant);
         }
 
         for (var property in clazz.staticProperties) {
           if (!property.isCanonical) continue;
-          generateProperty(package, lib, clazz, property);
+          generateProperty(_package, lib, clazz, property);
         }
 
         for (var property in clazz.propertiesForPages) {
           if (!property.isCanonical) continue;
-          generateProperty(package, lib, clazz, property);
+          generateProperty(_package, lib, clazz, property);
         }
 
         for (var method in clazz.methodsForPages) {
           if (!method.isCanonical) continue;
-          generateMethod(package, lib, clazz, method);
+          generateMethod(_package, lib, clazz, method);
         }
 
         for (var operator in clazz.operatorsForPages) {
           if (!operator.isCanonical) continue;
-          generateMethod(package, lib, clazz, operator);
+          generateMethod(_package, lib, clazz, operator);
         }
 
         for (var method in clazz.staticMethods) {
           if (!method.isCanonical) continue;
-          generateMethod(package, lib, clazz, method);
+          generateMethod(_package, lib, clazz, method);
         }
       }
 
       for (var eNum in lib.enums) {
         if (!eNum.isCanonical) continue;
-        generateEnum(package, lib, eNum);
+        generateEnum(_package, lib, eNum);
         for (var property in eNum.propertiesForPages) {
           if (!property.isCanonical) continue;
-          generateProperty(package, lib, eNum, property);
+          generateProperty(_package, lib, eNum, property);
         }
         for (var operator in eNum.operatorsForPages) {
           if (!operator.isCanonical) continue;
-          generateMethod(package, lib, eNum, operator);
+          generateMethod(_package, lib, eNum, operator);
         }
         for (var method in eNum.methodsForPages) {
           if (!method.isCanonical) continue;
-          generateMethod(package, lib, eNum, method);
+          generateMethod(_package, lib, eNum, method);
         }
       }
 
       for (var constant in lib.constants) {
         if (!constant.isCanonical) continue;
-        generateTopLevelConstant(package, lib, constant);
+        generateTopLevelConstant(_package, lib, constant);
       }
 
       for (var property in lib.properties) {
         if (!property.isCanonical) continue;
-        generateTopLevelProperty(package, lib, property);
+        generateTopLevelProperty(_package, lib, property);
       }
 
       for (var function in lib.functions) {
         if (!function.isCanonical) continue;
-        generateFunction(package, lib, function);
+        generateFunction(_package, lib, function);
       }
 
       for (var typeDef in lib.typedefs) {
         if (!typeDef.isCanonical) continue;
-        generateTypeDef(package, lib, typeDef);
+        generateTypeDef(_package, lib, typeDef);
       }
     }
   }
 
   void generatePackage() {
-    TemplateData data = new PackageTemplateData(this, package, useCategories);
-    stdout.write('\ndocumenting ${package.name}');
+    TemplateData data =
+        new PackageTemplateData(_options, _package, _options.useCategories);
+    stdout.write('\ndocumenting ${_package.name}');
 
     _build('index.html', _templates.indexTemplate, data);
   }
@@ -194,34 +185,35 @@ class HtmlGeneratorInstance implements HtmlOptions {
       package.warnOnElement(lib, PackageWarning.noLibraryLevelDocs);
     }
     TemplateData data =
-        new LibraryTemplateData(this, package, lib, useCategories);
+        new LibraryTemplateData(_options, package, lib, _options.useCategories);
 
     _build(path.join(lib.dirName, '${lib.fileName}'),
         _templates.libraryTemplate, data);
   }
 
   void generateClass(Package package, Library lib, Class clazz) {
-    TemplateData data = new ClassTemplateData(this, package, lib, clazz);
+    TemplateData data = new ClassTemplateData(_options, package, lib, clazz);
     _build(path.joinAll(clazz.href.split('/')), _templates.classTemplate, data);
   }
 
   void generateConstructor(
       Package package, Library lib, Class clazz, Constructor constructor) {
     TemplateData data =
-        new ConstructorTemplateData(this, package, lib, clazz, constructor);
+        new ConstructorTemplateData(_options, package, lib, clazz, constructor);
 
     _build(path.joinAll(constructor.href.split('/')),
         _templates.constructorTemplate, data);
   }
 
   void generateEnum(Package package, Library lib, Enum eNum) {
-    TemplateData data = new EnumTemplateData(this, package, lib, eNum);
+    TemplateData data = new EnumTemplateData(_options, package, lib, eNum);
 
     _build(path.joinAll(eNum.href.split('/')), _templates.enumTemplate, data);
   }
 
   void generateFunction(Package package, Library lib, ModelFunction function) {
-    TemplateData data = new FunctionTemplateData(this, package, lib, function);
+    TemplateData data =
+        new FunctionTemplateData(_options, package, lib, function);
 
     _build(path.joinAll(function.href.split('/')), _templates.functionTemplate,
         data);
@@ -230,7 +222,7 @@ class HtmlGeneratorInstance implements HtmlOptions {
   void generateMethod(
       Package package, Library lib, Class clazz, Method method) {
     TemplateData data =
-        new MethodTemplateData(this, package, lib, clazz, method);
+        new MethodTemplateData(_options, package, lib, clazz, method);
 
     _build(
         path.joinAll(method.href.split('/')), _templates.methodTemplate, data);
@@ -239,7 +231,7 @@ class HtmlGeneratorInstance implements HtmlOptions {
   void generateConstant(
       Package package, Library lib, Class clazz, Field property) {
     TemplateData data =
-        new ConstantTemplateData(this, package, lib, clazz, property);
+        new ConstantTemplateData(_options, package, lib, clazz, property);
 
     _build(path.joinAll(property.href.split('/')), _templates.constantTemplate,
         data);
@@ -248,7 +240,7 @@ class HtmlGeneratorInstance implements HtmlOptions {
   void generateProperty(
       Package package, Library lib, Class clazz, Field property) {
     TemplateData data =
-        new PropertyTemplateData(this, package, lib, clazz, property);
+        new PropertyTemplateData(_options, package, lib, clazz, property);
 
     _build(path.joinAll(property.href.split('/')), _templates.propertyTemplate,
         data);
@@ -257,7 +249,7 @@ class HtmlGeneratorInstance implements HtmlOptions {
   void generateTopLevelProperty(
       Package package, Library lib, TopLevelVariable property) {
     TemplateData data =
-        new TopLevelPropertyTemplateData(this, package, lib, property);
+        new TopLevelPropertyTemplateData(_options, package, lib, property);
 
     _build(path.joinAll(property.href.split('/')),
         _templates.topLevelPropertyTemplate, data);
@@ -266,14 +258,15 @@ class HtmlGeneratorInstance implements HtmlOptions {
   void generateTopLevelConstant(
       Package package, Library lib, TopLevelVariable property) {
     TemplateData data =
-        new TopLevelConstTemplateData(this, package, lib, property);
+        new TopLevelConstTemplateData(_options, package, lib, property);
 
     _build(path.joinAll(property.href.split('/')),
         _templates.topLevelConstantTemplate, data);
   }
 
   void generateTypeDef(Package package, Library lib, Typedef typeDef) {
-    TemplateData data = new TypedefTemplateData(this, package, lib, typeDef);
+    TemplateData data =
+        new TypedefTemplateData(_options, package, lib, typeDef);
 
     _build(path.joinAll(typeDef.href.split('/')), _templates.typeDefTemplate,
         data);
@@ -298,6 +291,8 @@ class HtmlGeneratorInstance implements HtmlOptions {
         assumeNullNonExistingProperty: false, errorOnMissingProperty: true);
 
     _writer(filename, content);
-    if (data.self is ModelElement) documentedElements.add(data.self);
+    if (data.self is ModelElement) {
+      _documentedElements.add(data.self);
+    }
   }
 }

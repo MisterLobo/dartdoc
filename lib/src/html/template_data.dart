@@ -54,8 +54,6 @@ abstract class TemplateData<T extends Documentable> {
 
   String get htmlBase;
   T get self;
-  String get version => htmlOptions.toolVersion;
-  String get relCanonicalPrefix => htmlOptions.relCanonicalPrefix;
 
   Iterable<Subnav> getSubNavItems() => <Subnav>[];
 
