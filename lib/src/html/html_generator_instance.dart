@@ -2,9 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:async' show Future, StreamController;
+import 'dart:async' show Future;
 import 'dart:convert' show JsonEncoder;
-import 'dart:io' show Directory, File, stdout;
+import 'dart:io' show File, stdout;
 
 import 'package:collection/collection.dart' show compareNatural;
 import 'package:path/path.dart' as path;
@@ -17,33 +17,30 @@ import 'resources.g.dart' as resources;
 import 'template_data.dart';
 import 'templates.dart';
 
+typedef void FileWriter(String path, Object content);
+
 class HtmlGeneratorInstance implements HtmlOptions {
   final HtmlGeneratorOptions _options;
-
-  String get url => _options.url;
   final Templates _templates;
   final Package package;
-  final Directory out;
   final List<ModelElement> documentedElements = <ModelElement>[];
-  final StreamController<File> _onFileCreated;
+  final FileWriter _writer;
+
+  String get url => _options.url;
+
   @override
   String get relCanonicalPrefix => _options.relCanonicalPrefix;
+
   @override
   String get toolVersion => _options.toolVersion;
   String get faviconPath => _options.faviconPath;
   bool get useCategories => _options.useCategories;
   bool get prettyIndexJson => _options.prettyIndexJson;
 
-  // Protect against bugs in canonicalization by tracking what files we
-  // write.
-  final Set<String> writtenFiles = new Set<String>();
-
-  HtmlGeneratorInstance(this._options, this._templates, this.package, this.out,
-      this._onFileCreated);
+  HtmlGeneratorInstance(
+      this._options, this._templates, this.package, this._writer);
 
   Future generate() async {
-    if (!out.existsSync()) out.createSync();
-
     if (package != null) {
       _generateDocs();
       _generateSearchIndex();
@@ -52,7 +49,7 @@ class HtmlGeneratorInstance implements HtmlOptions {
     await _copyResources();
     if (faviconPath != null) {
       var bytes = new File(faviconPath).readAsBytesSync();
-      _writeFile(path.join(out.path, 'static-assets', 'favicon.png'), bytes);
+      _writer(path.join('static-assets', 'favicon.png'), bytes);
     }
   }
 
@@ -90,7 +87,7 @@ class HtmlGeneratorInstance implements HtmlOptions {
     });
 
     String json = encoder.convert(indexItems);
-    _writeFile(path.join(out.path, 'index.json'), '${json}\n');
+    _writer(path.join('index.json'), '${json}\n');
   }
 
   void _generateDocs() {
@@ -291,45 +288,16 @@ class HtmlGeneratorInstance implements HtmlOptions {
             'encountered $resourcePath');
       }
       String destFileName = resourcePath.substring(prefix.length);
-      _writeFile(path.join(out.path, 'static-assets', destFileName),
+      _writer(path.join('static-assets', destFileName),
           await loader.loadAsBytes(resourcePath));
     }
   }
 
   void _build(String filename, TemplateRenderer template, TemplateData data) {
-    String fullName = path.join(out.path, filename);
-
     String content = template(data,
         assumeNullNonExistingProperty: false, errorOnMissingProperty: true);
 
-    _writeFile(fullName, content);
+    _writer(filename, content);
     if (data.self is ModelElement) documentedElements.add(data.self);
   }
-
-  void _writeFile(String filename, Object content) {
-    // If you see this assert, we're probably being called to build non-canonical
-    // docs somehow.  Check data.self.isCanonical and callers for bugs.
-    assert(!writtenFiles.contains(filename));
-
-    var file = _createOutputFile(filename);
-    if (content is String) {
-      file.writeAsStringSync(content);
-    } else if (content is List<int>) {
-      file.writeAsBytesSync(content);
-    } else {
-      throw new ArgumentError.value(
-          content, 'content', '`content` must be `String` or `List<int>`.');
-    }
-    _onFileCreated.add(file);
-    writtenFiles.add(filename);
-  }
-}
-
-File _createOutputFile(String filename) {
-  var file = new File(filename);
-  var parent = file.parent;
-  if (!parent.existsSync()) {
-    parent.createSync(recursive: true);
-  }
-  return file;
 }
