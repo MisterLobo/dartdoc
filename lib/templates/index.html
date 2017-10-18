@@ -18,9 +18,9 @@
     {{^useCategories}}
     <ol>
       <li class="section-title"><a href="{{package.href}}#libraries">Libraries</a></li>
-      {{#package.libraries}}
+      {{#package.publicLibraries}}
       <li>{{{linkedName}}}</li>
-      {{/package.libraries}}
+      {{/package.publicLibraries}}
     </ol>
     {{/useCategories}}
   </div>

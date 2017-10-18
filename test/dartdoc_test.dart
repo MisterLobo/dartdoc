@@ -40,7 +40,7 @@ void main() {
       Package p = results.package;
       expect(p.name, 'test_package');
       expect(p.hasDocumentationFile, isTrue);
-      expect(p.libraries, hasLength(10));
+      expect(p.publicLibraries, hasLength(10));
     });
 
     test('generate docs for ${path.basename(testPackageBadDir.path)} fails',
@@ -98,8 +98,8 @@ void main() {
       Package p = results.package;
       expect(p.name, 'test_package');
       expect(p.hasDocumentationFile, isTrue);
-      expect(p.libraries, hasLength(9));
-      expect(p.libraries.map((lib) => lib.name).contains('fake'), isFalse);
+      expect(p.publicLibraries, hasLength(9));
+      expect(p.publicLibraries.map((lib) => lib.name).contains('fake'), isFalse);
     });
 
     test('generate docs for package with embedder yaml', () async {

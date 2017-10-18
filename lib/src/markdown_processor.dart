@@ -390,6 +390,7 @@ Element _findRefElementInLibrary(String codeRef, ModelElement element,
   assert(element != null);
   assert(element.package.allLibrariesAdded);
 
+
   String codeRefChomped = codeRef.replaceFirst(isConstructor, '');
 
   final Library library = element.library;
@@ -518,6 +519,7 @@ Element _findRefElementInLibrary(String codeRef, ModelElement element,
       }
     }
   }
+  results.remove(null);
 
   // This could conceivably be a reference to an enum member.  They don't show up in allModelElements.
   // TODO(jcollins-g): Put enum members in allModelElements with useful hrefs without blowing up other assumptions about what that means.
@@ -541,10 +543,10 @@ Element _findRefElementInLibrary(String codeRef, ModelElement element,
       }
     }
   }
+  results.remove(null);
 
   Element result;
 
-  results.remove(null);
   if (results.length > 1) {
     // If this name could refer to a class or a constructor, prefer the class.
     if (results.any((r) => r is Class)) {

@@ -164,7 +164,7 @@ class DartDoc {
     if (config != null && config.autoIncludeDependencies) {
       package = Package.withAutoIncludedDependencies(
           libraries, packageMeta, warningOptions);
-      libraries = package.libraries.map((l) => l.element).toList();
+      libraries = package.publicLibraries.map((l) => l.element).toList();
       // remove excluded libraries again, in case they are picked up through
       // dependencies.
       excludes.forEach((pattern) {
@@ -200,10 +200,10 @@ class DartDoc {
 
     double seconds = _stopwatch.elapsedMilliseconds / 1000.0;
     print(
-        "\ndocumented ${package.libraries.length} librar${package.libraries.length == 1 ? 'y' : 'ies'} "
+        "\ndocumented ${package.publicLibraries.length} librar${package.publicLibraries.length == 1 ? 'y' : 'ies'} "
         "in ${seconds.toStringAsFixed(1)} seconds");
 
-    if (package.libraries.isEmpty) {
+    if (package.publicLibraries.isEmpty) {
       throw new DartDocFailure(
           "dartdoc could not find any libraries to document. Run `pub get` and try again.");
     }

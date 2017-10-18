@@ -15,7 +15,11 @@ class ElementType {
   final ModelElement element;
   String _linkedName;
 
-  ElementType(this._type, this.element);
+  ElementType(this._type, this.element) {
+    assert(element != null);
+  }
+
+  DartType get type => _type;
 
   bool get isDynamic => _type.isDynamic;
 
@@ -56,7 +60,11 @@ class ElementType {
     return _linkedName;
   }
 
-  String get name => _type.name;
+  String get name {
+    if (_type.name == null)
+      return _type.element.name;
+    return _type.name;
+  }
 
   ModelElement get returnElement {
     Element e;
@@ -129,6 +137,11 @@ class ElementType {
     // can happen if element is dynamic
     if (f.element.library != null) {
       lib = new ModelElement.from(f.element.library, element.library);
+    } else {
+      // TODO(jcollins-g): Assigning libraries to dynamics doesn't make sense,
+      // really, but is needed for .package.
+      assert(f.element.kind == ElementKind.DYNAMIC);
+      lib = element.library;
     }
     return new ElementType(f, new ModelElement.from(f.element, lib));
   }

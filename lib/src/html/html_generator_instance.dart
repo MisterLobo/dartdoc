@@ -96,86 +96,78 @@ class HtmlGeneratorInstance implements HtmlOptions {
 
     generatePackage();
 
-    for (var lib in package.libraries) {
+    for (var lib in package.libraries.where((l) => l.isDocumented)) {
       generateLibrary(package, lib);
 
-      for (var clazz in lib.allClasses) {
-        // TODO(jcollins-g): consider refactor so that only the canonical
-        // ModelElements show up in these lists
-        if (!clazz.isCanonical) continue;
-
+      for (var clazz in lib.allClasses.where((c) => c.isDocumented)) {
         generateClass(package, lib, clazz);
 
-        for (var constructor in clazz.constructors) {
+        for (var constructor in clazz.constructors.where((c) => c.isDocumented)) {
           if (!constructor.isCanonical) continue;
           generateConstructor(package, lib, clazz, constructor);
         }
 
-        for (var constant in clazz.constants) {
+        for (var constant in clazz.constants.where((c) => c.isDocumented)) {
           if (!constant.isCanonical) continue;
           generateConstant(package, lib, clazz, constant);
         }
 
-        for (var property in clazz.staticProperties) {
+        for (var property in clazz.staticProperties.where((s) => s.isDocumented)) {
           if (!property.isCanonical) continue;
           generateProperty(package, lib, clazz, property);
         }
 
-        for (var property in clazz.propertiesForPages) {
+        for (var property in clazz.propertiesForPages.where((p) => p.isDocumented)) {
           if (!property.isCanonical) continue;
           generateProperty(package, lib, clazz, property);
         }
 
-        for (var method in clazz.methodsForPages) {
+        for (var method in clazz.methodsForPages.where((m) => m.isDocumented)) {
           if (!method.isCanonical) continue;
           generateMethod(package, lib, clazz, method);
         }
 
-        for (var operator in clazz.operatorsForPages) {
+        for (var operator in clazz.operatorsForPages.where((o) => o.isDocumented)) {
           if (!operator.isCanonical) continue;
           generateMethod(package, lib, clazz, operator);
         }
 
-        for (var method in clazz.staticMethods) {
+        for (var method in clazz.staticMethods.where((s) => s.isDocumented)) {
           if (!method.isCanonical) continue;
           generateMethod(package, lib, clazz, method);
         }
       }
 
-      for (var eNum in lib.enums) {
-        if (!eNum.isCanonical) continue;
+      for (var eNum in lib.enums.where((e) => e.isDocumented)) {
         generateEnum(package, lib, eNum);
-        for (var property in eNum.propertiesForPages) {
-          if (!property.isCanonical) continue;
+        for (var property in eNum.propertiesForPages.where((p) => p.isDocumented)) {
           generateProperty(package, lib, eNum, property);
         }
-        for (var operator in eNum.operatorsForPages) {
-          if (!operator.isCanonical) continue;
+        for (var operator in eNum.operatorsForPages.where((o) => o.isDocumented)) {
           generateMethod(package, lib, eNum, operator);
         }
-        for (var method in eNum.methodsForPages) {
-          if (!method.isCanonical) continue;
+        for (var method in eNum.methodsForPages.where((m) => m.isDocumented)) {
           generateMethod(package, lib, eNum, method);
         }
       }
 
-      for (var constant in lib.constants) {
-        if (!constant.isCanonical) continue;
+      for (var constant in lib.constants.where((e) => e.isDocumented)) {
         generateTopLevelConstant(package, lib, constant);
       }
 
-      for (var property in lib.properties) {
-        if (!property.isCanonical) continue;
+      for (var property in lib.properties.where((p) => p.isDocumented)) {
+        if (property.name == 'topLevelVariable')
+          1+1;
+        if (property.linkedReturnType == '')
+          1+1;
         generateTopLevelProperty(package, lib, property);
       }
 
-      for (var function in lib.functions) {
-        if (!function.isCanonical) continue;
+      for (var function in lib.functions.where((f) => f.isDocumented)) {
         generateFunction(package, lib, function);
       }
 
-      for (var typeDef in lib.typedefs) {
-        if (!typeDef.isCanonical) continue;
+      for (var typeDef in lib.typedefs.where((t) => t.isDocumented)) {
         generateTypeDef(package, lib, typeDef);
       }
     }
@@ -310,7 +302,9 @@ class HtmlGeneratorInstance implements HtmlOptions {
     assert(!_writtenFiles.contains(fullName));
     _writeFile(fullName, content);
     _writtenFiles.add(fullName);
-    if (data.self is ModelElement) documentedElements.add(data.self);
+    if (data.self is ModelElement) {
+      documentedElements.add(data.self);
+    }
   }
 
   void _writeFile(String filename, String content) {

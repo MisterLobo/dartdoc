@@ -134,6 +134,83 @@
   }
  },
  {
+  "name": "AnotherParameterizedClass",
+  "qualifiedName": "ex.AnotherParameterizedClass",
+  "href": "ex/AnotherParameterizedClass-class.html",
+  "type": "class",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ex",
+   "type": "library"
+  }
+ },
+ {
+  "name": "AnotherParameterizedClass",
+  "qualifiedName": "ex.AnotherParameterizedClass",
+  "href": "ex/AnotherParameterizedClass/AnotherParameterizedClass.html",
+  "type": "constructor",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "AnotherParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "operator ==",
+  "qualifiedName": "ex.AnotherParameterizedClass.==",
+  "href": "ex/AnotherParameterizedClass/operator_equals.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "AnotherParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "hashCode",
+  "qualifiedName": "ex.AnotherParameterizedClass.hashCode",
+  "href": "ex/AnotherParameterizedClass/hashCode.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "AnotherParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "noSuchMethod",
+  "qualifiedName": "ex.AnotherParameterizedClass.noSuchMethod",
+  "href": "ex/AnotherParameterizedClass/noSuchMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "AnotherParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "runtimeType",
+  "qualifiedName": "ex.AnotherParameterizedClass.runtimeType",
+  "href": "ex/AnotherParameterizedClass/runtimeType.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "AnotherParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "toString",
+  "qualifiedName": "ex.AnotherParameterizedClass.toString",
+  "href": "ex/AnotherParameterizedClass/toString.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "AnotherParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
   "name": "Apple",
   "qualifiedName": "ex.Apple",
   "href": "ex/Apple-class.html",
@@ -2147,6 +2224,149 @@
   }
  },
  {
+  "name": "ParameterizedClass",
+  "qualifiedName": "ex.ParameterizedClass",
+  "href": "ex/ParameterizedClass-class.html",
+  "type": "class",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ex",
+   "type": "library"
+  }
+ },
+ {
+  "name": "ParameterizedClass",
+  "qualifiedName": "ex.ParameterizedClass",
+  "href": "ex/ParameterizedClass/ParameterizedClass.html",
+  "type": "constructor",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "operator +",
+  "qualifiedName": "ex.ParameterizedClass.+",
+  "href": "ex/ParameterizedClass/operator_plus.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "operator ==",
+  "qualifiedName": "ex.ParameterizedClass.==",
+  "href": "ex/ParameterizedClass/operator_equals.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aInheritedField",
+  "qualifiedName": "ex.ParameterizedClass.aInheritedField",
+  "href": "ex/ParameterizedClass/aInheritedField.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aInheritedGetter",
+  "qualifiedName": "ex.ParameterizedClass.aInheritedGetter",
+  "href": "ex/ParameterizedClass/aInheritedGetter.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aInheritedMethod",
+  "qualifiedName": "ex.ParameterizedClass.aInheritedMethod",
+  "href": "ex/ParameterizedClass/aInheritedMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aInheritedSetter",
+  "qualifiedName": "ex.ParameterizedClass.aInheritedSetter",
+  "href": "ex/ParameterizedClass/aInheritedSetter.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aInheritedTypedefReturningMethod",
+  "qualifiedName": "ex.ParameterizedClass.aInheritedTypedefReturningMethod",
+  "href": "ex/ParameterizedClass/aInheritedTypedefReturningMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "hashCode",
+  "qualifiedName": "ex.ParameterizedClass.hashCode",
+  "href": "ex/ParameterizedClass/hashCode.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "noSuchMethod",
+  "qualifiedName": "ex.ParameterizedClass.noSuchMethod",
+  "href": "ex/ParameterizedClass/noSuchMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "runtimeType",
+  "qualifiedName": "ex.ParameterizedClass.runtimeType",
+  "href": "ex/ParameterizedClass/runtimeType.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "toString",
+  "qualifiedName": "ex.ParameterizedClass.toString",
+  "href": "ex/ParameterizedClass/toString.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ParameterizedClass",
+   "type": "class"
+  }
+ },
+ {
   "name": "ParameterizedTypedef",
   "qualifiedName": "ex.ParameterizedTypedef",
   "href": "ex/ParameterizedTypedef.html",
@@ -2704,6 +2924,226 @@
   "overriddenDepth": 0,
   "enclosedBy": {
    "name": "SpecializedDuration",
+   "type": "class"
+  }
+ },
+ {
+  "name": "TemplatedClass",
+  "qualifiedName": "ex.TemplatedClass",
+  "href": "ex/TemplatedClass-class.html",
+  "type": "class",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ex",
+   "type": "library"
+  }
+ },
+ {
+  "name": "TemplatedClass",
+  "qualifiedName": "ex.TemplatedClass",
+  "href": "ex/TemplatedClass/TemplatedClass.html",
+  "type": "constructor",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "operator ==",
+  "qualifiedName": "ex.TemplatedClass.==",
+  "href": "ex/TemplatedClass/operator_equals.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aMethod",
+  "qualifiedName": "ex.TemplatedClass.aMethod",
+  "href": "ex/TemplatedClass/aMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "hashCode",
+  "qualifiedName": "ex.TemplatedClass.hashCode",
+  "href": "ex/TemplatedClass/hashCode.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "noSuchMethod",
+  "qualifiedName": "ex.TemplatedClass.noSuchMethod",
+  "href": "ex/TemplatedClass/noSuchMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "runtimeType",
+  "qualifiedName": "ex.TemplatedClass.runtimeType",
+  "href": "ex/TemplatedClass/runtimeType.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "toString",
+  "qualifiedName": "ex.TemplatedClass.toString",
+  "href": "ex/TemplatedClass/toString.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedClass",
+   "type": "class"
+  }
+ },
+ {
+  "name": "TemplatedInterface",
+  "qualifiedName": "ex.TemplatedInterface",
+  "href": "ex/TemplatedInterface-class.html",
+  "type": "class",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "ex",
+   "type": "library"
+  }
+ },
+ {
+  "name": "TemplatedInterface",
+  "qualifiedName": "ex.TemplatedInterface",
+  "href": "ex/TemplatedInterface/TemplatedInterface.html",
+  "type": "constructor",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "operator ==",
+  "qualifiedName": "ex.TemplatedInterface.==",
+  "href": "ex/TemplatedInterface/operator_equals.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aField",
+  "qualifiedName": "ex.TemplatedInterface.aField",
+  "href": "ex/TemplatedInterface/aField.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aGetter",
+  "qualifiedName": "ex.TemplatedInterface.aGetter",
+  "href": "ex/TemplatedInterface/aGetter.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aMethodInterface",
+  "qualifiedName": "ex.TemplatedInterface.aMethodInterface",
+  "href": "ex/TemplatedInterface/aMethodInterface.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aSetter",
+  "qualifiedName": "ex.TemplatedInterface.aSetter",
+  "href": "ex/TemplatedInterface/aSetter.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "aTypedefReturningMethodInterface",
+  "qualifiedName": "ex.TemplatedInterface.aTypedefReturningMethodInterface",
+  "href": "ex/TemplatedInterface/aTypedefReturningMethodInterface.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "hashCode",
+  "qualifiedName": "ex.TemplatedInterface.hashCode",
+  "href": "ex/TemplatedInterface/hashCode.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "noSuchMethod",
+  "qualifiedName": "ex.TemplatedInterface.noSuchMethod",
+  "href": "ex/TemplatedInterface/noSuchMethod.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "runtimeType",
+  "qualifiedName": "ex.TemplatedInterface.runtimeType",
+  "href": "ex/TemplatedInterface/runtimeType.html",
+  "type": "property",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
+   "type": "class"
+  }
+ },
+ {
+  "name": "toString",
+  "qualifiedName": "ex.TemplatedInterface.toString",
+  "href": "ex/TemplatedInterface/toString.html",
+  "type": "method",
+  "overriddenDepth": 0,
+  "enclosedBy": {
+   "name": "TemplatedInterface",
    "type": "class"
   }
  },

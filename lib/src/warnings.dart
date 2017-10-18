@@ -83,6 +83,7 @@ abstract class Warnable implements Locatable {
   void warn(PackageWarning warning,
       {String message, Iterable<Locatable> referredFrom});
   Warnable get enclosingElement;
+  bool get isDocumented;
 }
 
 /// Something that can be located for warning purposes.
@@ -111,6 +112,15 @@ enum PackageWarning {
   missingFromSearchIndex,
   typeAsHtml,
 }
+
+/// Warnings it is OK to skip if we can determine the warnable isn't documented.
+/// In particular, this set should not include warnings around public/private
+/// or canonicalization problems, because those can break the isDocumented()
+/// check.
+final Set<PackageWarning> skipWarningIfNotDocumentedFor = new Set()..addAll([
+  PackageWarning.unresolvedDocReference,
+  PackageWarning.typeAsHtml
+]);
 
 class PackageWarningOptions {
   // PackageWarnings must be in one of _ignoreWarnings or union(_asWarnings, _asErrors)
