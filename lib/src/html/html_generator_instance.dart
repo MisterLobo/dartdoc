@@ -5,7 +5,6 @@
 import 'dart:async' show Future, StreamController;
 import 'dart:convert' show JsonEncoder;
 import 'dart:io' show Directory, File, stdout;
-import 'dart:typed_data' show Uint8List;
 
 import 'package:collection/collection.dart' show compareNatural;
 import 'package:path/path.dart' as path;
@@ -52,8 +51,8 @@ class HtmlGeneratorInstance implements HtmlOptions {
 
     await _copyResources();
     if (faviconPath != null) {
-      File file = new File(path.join(out.path, 'static-assets', 'favicon.png'));
-      file.writeAsBytesSync(new File(faviconPath).readAsBytesSync());
+      var bytes = new File(faviconPath).readAsBytesSync();
+      _writeFile(path.join(out.path, 'static-assets', 'favicon.png'), bytes);
     }
   }
 
@@ -292,11 +291,8 @@ class HtmlGeneratorInstance implements HtmlOptions {
             'encountered $resourcePath');
       }
       String destFileName = resourcePath.substring(prefix.length);
-      File destFile =
-          new File(path.join(out.path, 'static-assets', destFileName))
-            ..createSync(recursive: true);
-      Uint8List resourceBytes = await loader.loadAsBytes(resourcePath);
-      destFile.writeAsBytesSync(resourceBytes);
+      _writeFile(path.join(out.path, 'static-assets', destFileName),
+          await loader.loadAsBytes(resourcePath));
     }
   }
 
@@ -306,24 +302,34 @@ class HtmlGeneratorInstance implements HtmlOptions {
     String content = template(data,
         assumeNullNonExistingProperty: false, errorOnMissingProperty: true);
 
-    // If you see this assert, we're probably being called to build non-canonical
-    // docs somehow.  Check data.self.isCanonical and callers for bugs.
-    assert(!writtenFiles.contains(fullName));
     _writeFile(fullName, content);
-    writtenFiles.add(fullName);
     if (data.self is ModelElement) documentedElements.add(data.self);
   }
 
-  void _writeFile(String filename, String content) {
-    File file = _createOutputFile(filename);
-    file.writeAsStringSync(content);
+  void _writeFile(String filename, Object content) {
+    // If you see this assert, we're probably being called to build non-canonical
+    // docs somehow.  Check data.self.isCanonical and callers for bugs.
+    assert(!writtenFiles.contains(filename));
+
+    var file = _createOutputFile(filename);
+    if (content is String) {
+      file.writeAsStringSync(content);
+    } else if (content is List<int>) {
+      file.writeAsBytesSync(content);
+    } else {
+      throw new ArgumentError.value(
+          content, 'content', '`content` must be `String` or `List<int>`.');
+    }
     _onFileCreated.add(file);
+    writtenFiles.add(filename);
   }
 }
 
 File _createOutputFile(String filename) {
-  File file = new File(filename);
-  Directory parent = file.parent;
-  if (!parent.existsSync()) parent.createSync(recursive: true);
+  var file = new File(filename);
+  var parent = file.parent;
+  if (!parent.existsSync()) {
+    parent.createSync(recursive: true);
+  }
   return file;
 }
